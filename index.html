@@ -235,6 +235,16 @@ dialog[open]{animation:pop .28s cubic-bezier(.2,.8,.2,1)}
   .sec-h{position:static}.sec-in{display:block}.hero{grid-template-columns:minmax(0,1fr) 150px}
   .row,.mod,.tile{break-inside:avoid}
 }
+.dk-lock{display:grid;gap:14px;justify-items:start;padding:clamp(18px,3vw,28px);max-width:520px}.dk-lock p{color:var(--muted)}
+.dk-r{display:flex;gap:10px;width:100%;flex-wrap:wrap}.dk-r input{flex:1 1 180px;height:46px;padding:0 18px;border-radius:999px;border:1px solid var(--gb);background:var(--glass2);color:var(--ink);font:500 .95rem var(--body)}
+.dk-r input:focus-visible,.dk-tab:focus-visible,.dk-nav:focus-visible{outline:2px solid var(--accent);outline-offset:2px}#dke{color:#B91C1C;min-height:1.2em}
+.dk-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.dk-tab{height:38px;padding:0 16px;border-radius:999px;border:1px solid var(--gb);background:var(--glass2);color:var(--ink);font:600 .85rem var(--body);cursor:pointer}
+.dk-tab[aria-selected=true]{background:var(--accent);color:var(--on);border-color:transparent}.dk-tab i{font-style:normal;opacity:.7;margin-left:4px}.dk-out{margin-left:auto}
+.dk-st{display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;gap:8px;padding:12px}.dk-st figure{margin:0;text-align:center;min-height:240px;display:grid;gap:8px;align-content:center}
+.dk-st img{max-width:100%;max-height:min(78vh,760px);margin:auto;border-radius:10px;box-shadow:0 10px 30px -12px var(--sh);background:#fff;-webkit-user-drag:none}.dk-st figcaption{font-size:.82rem;color:var(--muted)}
+.dk-nav{width:44px;height:44px;border-radius:50%;border:1px solid var(--gb);background:var(--glass2);color:var(--ink);font-size:1.5rem;line-height:1;cursor:pointer}.dk-act{margin-top:14px}
+@media(max-width:560px){.dk-st{grid-template-columns:36px minmax(0,1fr) 36px;gap:4px;padding:8px}.dk-nav{width:36px;height:36px}}
+@media print{#dokumen{display:none}}
 </style>
 </head>
 <body>
@@ -265,6 +275,7 @@ dialog[open]{animation:pop .28s cubic-bezier(.2,.8,.2,1)}
   <section class="pn glass sec rv" id="erp" aria-labelledby="h-erp"></section>
   <section class="pn glass sec rv" id="keahlian" aria-labelledby="h-keahlian"></section>
   <section class="pn glass sec rv" id="pendidikan" aria-labelledby="h-pendidikan"></section>
+  <section class="pn glass sec rv" id="dokumen" aria-labelledby="h-dokumen"></section>
   <section class="pn glass sec rv" id="kontak" aria-labelledby="h-kontak"></section>
   <noscript><p style="max-width:640px;margin:48px auto;padding:20px;background:#fff;color:#111;border-radius:16px">Halaman ini memerlukan JavaScript untuk menampilkan isi. CV lengkap tersedia dalam format Word: <a href="CV_Aspuro_Amarulloh_Khoiri_ATS.docx" download>unduh CV</a>.</p></noscript>
 </main>
@@ -371,7 +382,7 @@ prev:'<path d="m15 18-6-6 6-6"/>',next:'<path d="m9 18 6-6-6-6"/>',x:'<path d="M
 const svg=n=>`<svg viewBox="0 0 24 24" aria-hidden="true">${P[n]}</svg>`;
 const ico=(n,h,c='')=>`<span class="ic ${c}" style="${hv(h)}">${svg(n)}</span>`;
 const W=(s,o=0)=>esc(s).split(' ').map((w,i)=>`<span class="w" style="--i:${i+o}">${w}</span>`).join(' ');
-const NAV=[['profil','Profil','user','teal'],['pengalaman','Pengalaman','brief','orange'],['erp','Sistem ERP','layers','blue'],['keahlian','Keahlian','spark','pink'],['pendidikan','Pendidikan','cap','violet'],['kontak','Kontak','mail','green']];
+const NAV=[['profil','Profil','user','teal'],['pengalaman','Pengalaman','brief','orange'],['erp','Sistem ERP','layers','blue'],['keahlian','Keahlian','spark','pink'],['pendidikan','Pendidikan','cap','violet'],['dokumen','Dokumen','shield','indigo'],['kontak','Kontak','mail','green']];
 const head=(id,t,sub)=>{const n=NAV.find(x=>x[0]===id);return `<div class="sec-h">${ico(n[2],n[3],'lg')}<h2 id="h-${id}" class="tx">${W(t)}</h2>${sub?`<p>${esc(sub)}</p>`:''}</div>`};
 const MI={'Engineering':'ruler','Produksi':'factory','Master Schedule':'cal','Filling Material':'box','Quality Control':'shield','Quality Management':'clip','HSE System':'hat','Maintenance':'wrench','Purchase Order':'cart','SPP System':'file','Warehouse':'wh','MSB Approval':'check','Human Resource':'users','General Affairs':'home','Security Guard':'lock','Administration':'folder','Sistem Manajemen Gambar':'image','Delivery Sync':'truck','Cutting Plan Studio':'cut','Formulir Izin Terpadu':'list'};
 const GH=['orange','green','blue','violet'],AH=['cyan','teal','red','indigo'];
@@ -438,6 +449,28 @@ $('#kontak').innerHTML=`<div class="sec-in">${head('kontak','Kontak','Terbuka un
   <div class="tile qrc w2" id="qw"><div id="qr"></div><span class="k">Pindai untuk membuka CV ini di ponsel</span></div></div>
   <div class="cta"><a class="btn pri" href="https://wa.me/${esc(C.wa)}" target="_blank" rel="noopener">${svg('chat')}Chat WhatsApp</a><a class="btn" href="${esc(C.cv)}" download>${svg('dl')}Unduh CV</a></div></div></div>`;
 
+/* Dokumen aman: file di repo berupa ciphertext AES-256-GCM, didekripsi di browser setelah kode akses benar */
+(()=>{const box=$('#dokumen');box.innerHTML=`<div class="sec-in">${head('dokumen','Dokumen pendukung','Ijazah, sertifikat, dan pengalaman kerja. Dilindungi kode akses.')}<div id="dk"></div></div>`;
+const dk=$('#dk'),TE=new TextEncoder();let M,pw='',G=0,I=0,U={},bad=0;
+const wipe=()=>{Object.values(U).forEach(URL.revokeObjectURL);U={};pw='';G=I=0};
+async function dec(f){if(U[f])return U[f];const b=new Uint8Array(await(await fetch('dokumen/'+f)).arrayBuffer());
+const km=await crypto.subtle.importKey('raw',TE.encode(pw),'PBKDF2',false,['deriveKey']);
+const k=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b.slice(0,16),iterations:M.iter,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
+const o=await crypto.subtle.decrypt({name:'AES-GCM',iv:b.slice(16,28)},k,b.slice(28));return U[f]=URL.createObjectURL(new Blob([o],{type:'image/jpeg'}))}
+function lock(msg=''){wipe();dk.innerHTML=`<form class="dk-lock tile" id="dkf">${ico('shield','indigo','lg')}<p>Dokumen ini bersifat pribadi. Hubungi saya untuk mendapatkan kode akses, lalu masukkan di sini.</p><div class="dk-r"><input id="dkp" type="password" autocomplete="off" placeholder="Kode akses" aria-label="Kode akses" required><button class="btn" type="submit">Buka dokumen</button></div><small id="dke" role="alert">${msg}</small></form>`;
+$('#dkf').onsubmit=async e=>{e.preventDefault();const b=$('#dkf button'),m=$('#dke');b.disabled=true;m.textContent='Memeriksa…';pw=$('#dkp').value;
+try{M=M||await(await fetch('dokumen/manifest.json')).json();await dec(M.groups[0].items[0].f);bad=0;show()}
+catch(x){pw='';bad++;m.textContent=x instanceof TypeError?'Dokumen tidak dapat dimuat.':'Kode akses salah.';await new Promise(r=>setTimeout(r,Math.min(bad*1200,6000)));b.disabled=false}}}
+function show(){const g=M.groups[G],it=g.items[I],n=g.items.length;
+dk.innerHTML=`<div class="dk-tabs" role="tablist">${M.groups.map((x,i)=>`<button class="dk-tab" role="tab" aria-selected="${i===G}" data-g="${i}">${esc(x.g)}<i>${x.items.length}</i></button>`).join('')}<button class="dk-tab dk-out" id="dkx">Kunci kembali</button></div>
+<div class="dk-st tile"><button class="dk-nav" data-s="-1" aria-label="Sebelumnya">‹</button><figure><img id="dki" alt="${esc(it.n)}" draggable="false"><figcaption>${esc(it.n)} · ${I+1} dari ${n}</figcaption></figure><button class="dk-nav" data-s="1" aria-label="Berikutnya">›</button></div>
+<div class="dk-act"><a class="btn" id="dkd" download="${it.n.replace(/[^\w]+/g,'_')}.jpg" href="#">Unduh gambar ini</a></div>`;
+dec(it.f).then(u=>{const im=$('#dki');if(im){im.src=u;$('#dkd').href=u}});const nx=g.items[(I+1)%n];dec(nx.f).catch(()=>{});
+$$('.dk-tab[data-g]').forEach(b=>b.onclick=()=>{G=+b.dataset.g;I=0;show()});$('#dkx').onclick=()=>lock();
+$$('.dk-nav').forEach(b=>b.onclick=()=>{I=(I+ +b.dataset.s+n)%n;show()})}
+box.addEventListener('keydown',e=>{if(!M||!pw||!$('#dki'))return;const n=M.groups[G].items.length;if(e.key==='ArrowRight'){I=(I+1)%n;show()}else if(e.key==='ArrowLeft'){I=(I-1+n)%n;show()}});
+let tx=0;box.addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});box.addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-tx;if(pw&&$('#dki')&&Math.abs(d)>60){const n=M.groups[G].items.length;I=(I+(d<0?1:-1)+n)%n;show()}});
+addEventListener('pagehide',wipe);lock()})();
 $('#ft').innerHTML=`<span>© 2026 ${esc(FULL)}</span><span>Revisi ${esc(D.rev)}</span><span class="cr">Belajar Sampai Mati, Sekolah Sampai Tingkat Tertinggi.</span>`;
 
 try{new QRCode($('#qr'),{text:location.href.split('#')[0],width:92,height:92,colorDark:'#0F2420',colorLight:'#ffffff'})}catch(e){const q=$('#qw');q&&(q.hidden=true)}
